@@ -44,7 +44,7 @@
 	<h1><?php echo $firstName ." " .$lastName;?>, IF18</h1>
 	<p>See leht on loodud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames, ei pruugi parim välja näha ning kindlasti ei sisalda tõsisevõetavat sisu.</p>
 	
-	<p>Tundides tehtu: <a href="photo.php">photo.php</a>, <a href="photo2.php">photo2.php</a>, <a href="page.php">page.php</a></p>
+	<p>Tundides tehtu: <a href="photo.php">photo.php</a>, <a href="page.php">page.php</a>, <a href="addmsg.php">addmsg.php</a></p>
 	
 	<?php
 		//echo "<p>Tänane kuupäev on: " .$dateToday .".</p> \n";

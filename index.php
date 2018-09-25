@@ -33,7 +33,15 @@
 		echo "<p>Tänane kuupäev on: " .$dateToday .".</p> \n";
 		echo "<p>Lehe avamise hetkel oli kell " .date("H:i:s") ."." ." Käes oli " .$partOfDay .".</p> \n";
 	?>
-	<p>Hello world<p>
+	<p>
+	Tunnid:
+	<br>
+	<br>
+	<a href="../veebiprogrammeerimine/tund_3">Tund 3</a>
+	<br>
+	<a href="../veebiprogrammeerimine/tund_4">Tund 4</a>
+	
+	</p>
 	<!--<img src="http://greeny.cs.tlu.ee/~rinde/veebiprogrammeerimine2018s/tlu_terra_600x400_1.jpg" alt="TLÜ Terra õppehoone">-->
 	
 	<img src="../../~rinde/veebiprogrammeerimine2018s/tlu_terra_600x400_1.jpg" alt="TLÜ Terra õppehoone">
