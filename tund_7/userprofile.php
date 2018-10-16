@@ -12,23 +12,34 @@
 		exit();
 	}
 	
+	$data = userprofileload();
+	
+	
 ?>
 
 <!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>pealeht</title>
+		<title>profiil</title>
 	</head>
 	<body>
-		<h1>Pealeht</h1>
+		<h1>Profiil</h1>
 		<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
 	<p>Tere tulemast, <?php echo $_SESSION["firstName"] ." " .$_SESSION["lastName"] ."."; ?></p>
 	<ul>
-		<li><a href="?logout=1">Logi välja</a></li>
-		<li><a href="validatemsg.php">Valideeri anonüümseid sõnumeid</a></li>
+		<li><a href="main.php">Pealeht</a></li>	
 	</ul>
+	
+	<form>
+		<textarea rows="10" cols="80" name="description"><?php echo $data[0]; ?></textarea><br>
+		<label>Minu valitud taustavärv: </label><input name="bgcolor" type="color" value="<?php echo $data[1]; ?>"><br>
+		<label>Minu valitud tekstivärv: </label><input name="txtcolor" type="color" value="<?php echo $data[2]; ?>"><br>
+		<input type="submit" name="submitProfile" value="Salvesta profiil">
+	</form>
+	
+	
 	
 	</body>
 </html>

@@ -25,74 +25,74 @@
 	$monthNamesET = ["jaanuar", "veebruar", "märts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember"];
   
 	if (isset($_POST["submitUserData"])){
-	//Kontrollime, kas kasutaja on nuppu vajutanud
-	//var_dump($_POST);
-	if (isset($_POST["firstName"]) and !empty($_POST["firstName"])){
-		//$firstName = $_POST["firstName"];
-		$firstName = test_input($_POST["firstName"]);
-	} else {
-		$firstNameError = " Palun sisesta oma eesnimi!";
-	}
-	if (isset($_POST["lastName"]) and !empty($_POST["lastName"])){
-		$lastName = test_input($_POST["lastName"]);
-	} else {
-		$lastNameError = " Palun sisesta oma perekonnanimi!";
-	}
-	
-	if (isset($_POST["gender"]) and !empty($_POST["gender"])){
-		$gender = intval($_POST["gender"]);
-	} else {
-		$genderError = "Palun vali sugu!";
-	}
-	
-	if (isset($_POST["email"]) and !empty($_POST["email"])){
-		$email = test_input($_POST["email"]);
-	} else {
-		$emailError = " Palun sisesta oma e-posti aadress!";
-	}
-
-	if (empty($_POST["birthDay"])){
-		$birthDayError = "Palun sisesta sünnipäev!";
-	}
-
-	if (empty($_POST["birthMonth"])){
-		$birthMonthError = "Palun sisesta sünnikuu!";
-	}
-
-	if (empty($_POST["birthYear"])){
-		$birthYearError = "Palun sisesta sünniaasta!";
-	}
-	
-	if(isset($_POST["birthDay"]) and isset($_POST["birthMonth"]) and isset($_POST["birthYear"])){
-		
-		//checkdate kuu,päev,aasta täisarvud
-		if(checkdate(intval($_POST["birthMonth"]), intval($_POST["birthDay"]), intval($_POST["birthYear"]))){
-			$birthDate = date_create($_POST["birthMonth"] ."/" .$_POST["birthDay"] ."/" .$_POST["birthYear"]);
-			$birthDate = date_format($birthDate, "Y-m-d");
-			
-			//echo $birthDate;
-			
+		//Kontrollime, kas kasutaja on nuppu vajutanud
+		//var_dump($_POST);
+		if (isset($_POST["firstName"]) and !empty($_POST["firstName"])){
+			//$firstName = $_POST["firstName"];
+			$firstName = test_input($_POST["firstName"]);
 		} else {
-			$birthDateError = "Palun vali võimalik kuupäev!";
+			$firstNameError = " Palun sisesta oma eesnimi!";
+		}
+		if (isset($_POST["lastName"]) and !empty($_POST["lastName"])){
+			$lastName = test_input($_POST["lastName"]);
+		} else {
+			$lastNameError = " Palun sisesta oma perekonnanimi!";
 		}
 		
-		
-	}
-	
-	if (isset($_POST["password"]) and strlen($_POST["password"]) > 7){
-		if(isset($_POST["confirmpassword"]) and $_POST["password"] == $_POST["confirmpassword"]){
-			$_POST["password"] = $_POST["password"];
+		if (isset($_POST["gender"]) and !empty($_POST["gender"])){
+			$gender = intval($_POST["gender"]);
 		} else {
-			$passwordError = "Paroolid ei kattu!";
+			$genderError = "Palun vali sugu!";
 		}
-	} else {
-		$passwordError = " Parooli pikkus peab olema vähemalt 8 märki!";
-	}
+		
+		if (isset($_POST["email"]) and !empty($_POST["email"])){
+			$email = test_input($_POST["email"]);
+		} else {
+			$emailError = " Palun sisesta oma e-posti aadress!";
+		}
+
+		if (empty($_POST["birthDay"])){
+			$birthDayError = "Palun sisesta sünnipäev!";
+		}
+
+		if (empty($_POST["birthMonth"])){
+			$birthMonthError = "Palun sisesta sünnikuu!";
+		}
+
+		if (empty($_POST["birthYear"])){
+			$birthYearError = "Palun sisesta sünniaasta!";
+		}
+		
+		if(isset($_POST["birthDay"]) and isset($_POST["birthMonth"]) and isset($_POST["birthYear"])){
+			
+			//checkdate kuu,päev,aasta täisarvud
+			if(checkdate(intval($_POST["birthMonth"]), intval($_POST["birthDay"]), intval($_POST["birthYear"]))){
+				$birthDate = date_create($_POST["birthMonth"] ."/" .$_POST["birthDay"] ."/" .$_POST["birthYear"]);
+				$birthDate = date_format($birthDate, "Y-m-d");
+				
+				//echo $birthDate;
+				
+			} else {
+				$birthDateError = "Palun vali võimalik kuupäev!";
+			}
+			
+			
+		}
+		
+		if (isset($_POST["password"]) and strlen($_POST["password"]) > 7){
+			if(isset($_POST["confirmpassword"]) and $_POST["password"] == $_POST["confirmpassword"]){
+				$_POST["password"] = $_POST["password"];
+			} else {
+				$passwordError = "Paroolid ei kattu!";
+			}
+		} else {
+			$passwordError = " Parooli pikkus peab olema vähemalt 8 märki!";
+		}
 
 
-	if(empty($firstNameError) and empty($lastNameError) and empty($birthMonthError) and empty($birthDayError) and empty($birthYearError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError)){
-		$notice = signup($firstName, $lastName, $birthDate, $gender, $email, $_POST["password"]);
-	}
+		if(empty($firstNameError) and empty($lastNameError) and empty($birthMonthError) and empty($birthDayError) and empty($birthYearError) and empty($birthDateError) and empty($genderError) and empty($emailError) and empty($passwordError)){
+			$notice = signup($firstName, $lastName, $birthDate, $gender, $email, $_POST["password"]);
+		}
 	
 	}
 	

@@ -26,8 +26,10 @@
 	<hr>
 	<p>Tere tulemast, <?php echo $_SESSION["firstName"] ." " .$_SESSION["lastName"] ."."; ?></p>
 	<ul>
-		<li><a href="?logout=1">Logi välja</a></li>
 		<li><a href="validatemsg.php">Valideeri anonüümseid sõnumeid</a></li>
+		<li><a href="users.php">Kasutajad</a></li>
+		<li>Näita valideeritud <a href="validatedmessages.php">sõnumeid</a> valideerijate kaupa</li>
+		<li><a href="?logout=1">Logi välja</a></li>
 	</ul>
 	
 	</body>

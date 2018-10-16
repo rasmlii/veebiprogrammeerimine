@@ -1,6 +1,8 @@
 <?php
 	require("functions.php");
 	
+	$notice = "";
+
 	if(!isset($_SESSION["userId"])){
 		header("Location: index_1.php");
 		exit();
@@ -14,6 +16,12 @@
 	
 	if(isset($_GET["id"])){
 		$msg = readmsgforvalidation($_GET["id"]);
+	}
+
+	if(isset($_POST["submitValidation"])){
+		$notice = validatemsg($_POST["id"], $_POST["validation"]);
+		header("Location: validatemsg.php");
+		
 	}
 	
 ?>

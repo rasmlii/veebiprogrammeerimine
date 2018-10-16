@@ -8,6 +8,96 @@
 	session_start();
 	
 	//UPDATE vpamsg SET acceptedby=?, accepted=?, accepttime=now() WHERE id=?
+
+	function userprofileload(){
+		$data = [];
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("SELECT description, bgcolor, txtcolor FROM vpuserprofiles WHERE user_id=?");
+		echo $mysqli->error;
+		
+		$stmt->bind_param("i", $_SESSION["userId"]);
+		$stmt->bind_result($descr, $bgcol, $txtcol);
+		$stmt->execute();
+		
+		if($stmt->fetch()){
+			$data = [$descr, $bgcol, $txtcol];
+		}else{
+			$descr = "Pole iseloomustust lisanud.";
+			$bgcol = "#FFFFFF";
+			$txtcol = "#000000";
+			$data = [$descr, $bgcol, $txtcol];
+			
+		}
+		
+		$stmt->close();
+		$mysqli->close();
+		return $data;
+	}
+	
+	
+	
+	function readallvalidatedmessagesbyuser(){
+		$msghtml = "";
+		$temphtml = "";
+		$hasvalidated = 0;
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("SELECT id, firstname, lastname FROM vpusers");
+		echo $mysqli->error;
+		$stmt->bind_result($idFromDb, $firstnameFromDb, $lastnameFromDb);
+		
+		$stmt2 = $mysqli->prepare("SELECT message, accepted FROM vpamsg WHERE acceptedby=?");
+		echo $mysqli->error;
+		$stmt2->bind_param("i", $idFromDb);
+		$stmt2->bind_result($msgFromDb, $acceptedFromDb);
+		
+		$stmt->execute();
+		$stmt->store_result();
+		while($stmt->fetch()){
+			$temphtml .= "<h3>" .$firstnameFromDb ." " .$lastnameFromDb ."</h3> \n";
+			$stmt2->execute();
+			
+			
+		
+		
+			while($stmt2->fetch()){
+				$hasvalidated .= 1;
+				$temphtml .= "<p><b>";
+				if($acceptedFromDb == 1){
+					$temphtml .= "Lubatud: ";
+				} else {
+					$temphtml .= "Keelatud: ";
+				}
+				$temphtml .= "</b>" .$msgFromDb ."</p> \n";
+				}
+			if($hasvalidated > 0){
+				$msghtml .= $temphtml;
+				$hasvalidated = 0;
+			}	
+			$temphtml = "";
+			
+		
+		}
+		$stmt2->close();
+		$stmt->close();
+		$mysqli->close();
+		return $msghtml;
+	}
+		
+	function validatemsg($id, $validation){
+		$notice = "";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		
+		$stmt = $mysqli->prepare("UPDATE vpamsg SET acceptedby=?, accepted=?, accepttime=now() WHERE id=?");
+		echo $mysqli->error;
+		$stmt->bind_param("iii", $_SESSION["userId"], $validation, $id);
+		$stmt->execute();
+
+		$stmt->close();
+		$mysqli->close();
+		return $notice;
+	}
 	
 	function readmsgforvalidation($editId){
 		$notice = "";
@@ -19,6 +109,27 @@
 		if($stmt->fetch()){
 			$notice = $msg;
 		}
+		$stmt->close();
+		$mysqli->close();
+		return $notice;
+	}
+
+	function allvalidmessages(){
+
+		$notice = "<ul> \n";
+		$accepted = 1;
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		$stmt = $mysqli->prepare("SELECT message FROM vpamsg WHERE accepted=? ORDER BY accepttime DESC");
+		echo $mysqli->error;
+		$stmt->bind_param("i", $accepted);
+		$stmt->bind_result($msg);
+		$stmt->execute();
+		while($stmt->fetch()){
+			$notice .= "<li>" .$msg ."</li> \n";
+		}
+
+		$notice .= "</ul> \n";
+		
 		$stmt->close();
 		$mysqli->close();
 		return $notice;
@@ -87,8 +198,25 @@
 		return $notice;
 	}
 	
-	
-	
+	function userlist(){
+		$notice = "<ul> \n";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+		$stmt = $mysqli->prepare("SELECT firstname, lastname, email FROM vpusers WHERE id !=?");
+		echo $mysqli->error;
+		$stmt->bind_param("i", $_SESSION["userId"]);
+		$stmt->bind_result($firstname, $lastname, $email);
+		$stmt->execute();
+		
+		while($stmt->fetch()){
+			$notice .= "<li>" .$firstname ." " .$lastname .", " .$email ."</li> \n";
+		}
+		
+		$notice .= "</ul> \n";
+		
+		$stmt->close();
+		$mysqli->close();
+		return $notice;
+	}
 	
 	function signup($firstName, $lastName, $birthDate, $gender, $email, $password){
 		$notice = "";
