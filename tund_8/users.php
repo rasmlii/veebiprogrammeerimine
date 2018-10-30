@@ -14,26 +14,9 @@
 	
 	$data = userprofileload();
 
+	$pagetitle = "Kasutajad";
+	require("header.php");
 ?>
-
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>kasutajad</title>
-
-		<?php
-			echo "<style>
-				body{
-					background-color: " .$data[1] ."; 
-					color: " .$data[2] ."
-				} 
-			</style>";
-		?>
-
-	</head>
-	<body>
-		<h1>Kasutajad</h1>
 		<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
 	<ul>

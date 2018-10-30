@@ -18,51 +18,48 @@
 	$notice = "";
 	
 	if(isset($_POST["submitProfile"])){
-
-		if(isset($_POST["description"])){
+		if(isset($_POST["description"]) and isset($_POST["bgcolor"]) and isset($_POST["txtcolor"])){
 			if(empty($_POST["description"])){
-				$description = "Pole iseloomustust lisanud.";
+			 	$description = "Pole iseloomustust lisanud.";
 			} else {
 				$description = test_input($_POST["description"]);
 			}
-		}
-
-		if(isset($_POST["bgcolor"])){
 			$bgcolor = $_POST["bgcolor"];
-		}
-
-		if(isset($_POST["txtcolor"])){
 			$txtcolor = $_POST["txtcolor"];
-		}
-
-		if(empty($descriptionerror)){
 			$notice = saveprofile($description, $bgcolor, $txtcolor);
 		}
-
 	}
+
+	// if(isset($_POST["submitProfile"])){
+
+	// 	if(isset($_POST["description"])){
+	// 		if(empty($_POST["description"])){
+	// 			$description = "Pole iseloomustust lisanud.";
+	// 		} else {
+	// 			$description = test_input($_POST["description"]);
+	// 		}
+	// 	}
+
+	// 	if(isset($_POST["bgcolor"])){
+	// 		$bgcolor = $_POST["bgcolor"];
+	// 	}
+
+	// 	if(isset($_POST["txtcolor"])){
+	// 		$txtcolor = $_POST["txtcolor"];
+	// 	}
+
+	// 	if(empty($descriptionerror)){
+	// 		$notice = saveprofile($description, $bgcolor, $txtcolor);
+	// 	}
+
+	// }
 	
 	$data = userprofileload();
-
+	$pagetitle = "Profiil";
+	require("header.php");
 ?>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>profiil</title>
-		
-		<?php
-		echo "<style>
-	 		body{
-				background-color: " .$data[1] ."; 
-				color: " .$data[2] ."
-			} 
-		</style>";
-		?>
 
-	</head>
-	<body>
-		<h1>Profiil</h1>
 		<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
 	<p>Tere tulemast, <?php echo $_SESSION["firstName"] ." " .$_SESSION["lastName"] ."."; ?></p>

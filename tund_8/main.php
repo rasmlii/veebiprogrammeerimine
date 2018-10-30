@@ -13,27 +13,11 @@
 	}
 
 	$data = userprofileload();
-	
+	$pagetitle = "Pealeht";
+	require("header.php");
 ?>
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>pealeht</title>
 
-		<?php
-			echo "<style>
-				body{
-					background-color: " .$data[1] ."; 
-					color: " .$data[2] ."
-				} 
-			</style>";
-		?>
-
-	</head>
-	<body>
-		<h1>Pealeht</h1>
 		<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
 	<p>Tere tulemast, <?php echo $_SESSION["firstName"] ." " .$_SESSION["lastName"] ."."; ?></p>
@@ -42,6 +26,8 @@
 		<li><a href="validatemsg.php">Valideeri anonüümseid sõnumeid</a></li>
 		<li><a href="users.php">Kasutajad</a></li>
 		<li>Näita valideeritud <a href="validatedmessages.php">sõnumeid</a> valideerijate kaupa</li>
+		<li>Fotode <a href="photoupload.php">üleslaadimine</a></li>
+		
 		<li><a href="?logout=1">Logi välja</a></li>
 	</ul>
 	

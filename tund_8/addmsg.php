@@ -23,10 +23,18 @@
 	<title>Anonüümse sõnumi lisamine</title>
 </head>
 <body>
+	<div>
+		<a href="main.php">
+			<img src="../vp_picfiles/vp_logo_w135_h90.png" alt="VP logo">
+		</a>
+		<img src="../vp_picfiles/vp_banner.png" alt="VP banner">
+	</div>
 	<h1>Sõnumi lisamine</h1>
 	<p>See leht on loodud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames, ei pruugi parim välja näha ning kindlasti ei sisalda tõsisevõetavat sisu.</p>
 	<hr>
-	
+	<ul>
+		<li><a href="index_1.php">Avaleht</a></li>
+	</ul>
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 		<label>Sõnum (max 256 märki):</label>
 		<br>

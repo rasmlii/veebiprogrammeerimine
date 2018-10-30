@@ -14,25 +14,9 @@
 	
 	$messages = readallvalidatedmessagesbyuser();
 	$data = userprofileload();
+	$pagetitle = "Anonüümsed sõnumid";
+	require("header.php");
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Anonüümsed sõnumid</title>
-
-	<?php
-		echo "<style>
-	 		body{
-				background-color: " .$data[1] ."; 
-				color: " .$data[2] ."
-			} 
-		</style>";
-	?>
-		
-</head>
-<body>
-	<h1>Sõnumid</h1>
 	<p>Siin on minu <a href="http://www.tlu.ee">TLÜ</a> õppetöö raames valminud veebilehed. Need ei oma mingit sügavat sisu ja nende kopeerimine ei oma mõtet.</p>
 	<hr>
 	<ul>
@@ -41,7 +25,7 @@
 		
 	</ul>
 	<hr>
-	<h2>Valideerimata sõnumid</h2>
+	<h2>Anonüümsed sõnumid</h2>
 	<?php echo $messages; ?>
 
 

@@ -31,7 +31,13 @@
 	<title>Katseline veeb</title>
   </head>
   <body>
-    <h1>Teretulemast</h1>
+	<div>
+		<a href="main.php">
+			<img src="../vp_picfiles/vp_logo_w135_h90.png" alt="VP logo">
+		</a>
+		<img src="../vp_picfiles/vp_banner.png" alt="VP banner">
+	</div>
+    <h1>Tere tulemast</h1>
 	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
 	<form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
