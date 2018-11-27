@@ -12,22 +12,9 @@
 		exit();
 	}
 	
-	require("classes/Photoupload.class.php");
-	
-	/*
-	require("classes/Test.class.php");
-	$myTest = new Test(4);
-	$mySecondaryTest = new Test(7);
-	echo "Teine avalik number on " .$mySecondaryTest->publicNumber ."! ";
-	echo $myTest->publicNumber;
-	$myTest->tellInfo();
-	unset($myTest);
-	*/
-	
 	$target_dir = "../vp_pic_uploads/";
 	$uploadOk = 1;
-	$notice1 = "";
-	$uploadNotice = "";
+	$notice = "";
 	
 	// Check if image file is a actual image or fake image
 	if(isset($_POST["submitImage"])) {
@@ -37,9 +24,7 @@
 			//var_dump($_FILES["fileToUpload"]);
 			
 			$imageFileType = strtolower(pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION));			
-			$timestamp = microtime(1) * 10000;	
-
-			$target_file_name = "vp_" .$timestamp ."." .$imageFileType;
+			$timestamp = microtime(1) * 10000;			
 			$target_file = $target_dir ."vp_" .$timestamp ."." .$imageFileType;
 			
 			//$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
@@ -73,23 +58,17 @@
 				$notice .= " Valitud faili ei saa üles laadida.";
 			// if everything is ok, try to upload file
 			} else {
-				$myPhoto = new Photoupload($_FILES["fileToUpload"]["tmp_name"], $imageFileType);
-				$myPhoto->changePhotoSize(600, 400);
-				$myPhoto->addWatermark();
-				$myPhoto->addTextToImage();
-				$notice = $myPhoto->savePhoto($target_file);
-				unset($myPhoto);
-				
-				if($notice == 1){
-					addPhotoData($target_file_name, $_POST["altText"], $_POST["privacy"]);
-					$uploadNotice = "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on üles laetud.";
+				if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+					$notice = "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on üles laetud.";
 				} else {
-					$uploadNotice = "Faili üleslaadimisel tekkis tehniline viga.";
+					$notice = "Faili üleslaadimisel tekkis tehniline viga.";
 				}
 			}
 		}
 	}
+	// Check if file already exists
 	
+
 	$data = userprofileload();
 	$pagetitle = "Fotode üleslaadimine";
 	require("header.php");
@@ -108,22 +87,10 @@
 	
 	<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data">
 		<label>Vali üleslaetav pildifail (kuni 2,5MB)</label><br>
-		<input type="file" name="fileToUpload" id="fileToUpload">
-		<br>
-		<br>
-		<label>Alt tekst: </label>
-		<input type="text" name="altText">
-		<br>
-		<br>
-		<label>Pildi privaatsus:</label>
-		<br>
-		<input type="radio" name="privacy" value="1"><label>Avalik</label>
-		<input type="radio" name="privacy" value="2"><label>Ainult Sisselogitud kasutajad</label>
-		<input type="radio" name="privacy" value="3" checked><label>Privaatne</label>
-		<br>
+		<input type="file" name="fileToUpload" id="fileToUpload"><br>
 		<input type="submit" value="Lae üles" name="submitImage">
 	</form>
-	<p><?php echo $uploadNotice; echo $notice1; ?></p>
+	<p><?php echo $notice; ?></p>
 	
 	</body>
 </html>

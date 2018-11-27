@@ -24,28 +24,71 @@
 	unset($myTest);
 	*/
 	
-	$target_dir = "../vp_pic_uploads/";
+	
+	$target_dir = $picDir;
+	$thumb_dir = $thumbDir;
+	$thumbSize = 100;
+	$target_file = "";
+	$imageNamePrefix = "vp_";
+	$textToImage = "Veebiprogrammeerimine";
+	$pathToWatermark = "../vp_picfiles/vp_logo_w100_overlay.png";
 	$uploadOk = 1;
+	$notice = "";
+	
 	$notice1 = "";
 	$uploadNotice = "";
 	
 	// Check if image file is a actual image or fake image
 	if(isset($_POST["submitImage"])) {
+		echo "Vajutati nuppu!";
 		
 		if(!empty($_FILES["fileToUpload"]["name"])){
-			
+			echo "Pilt valitud!";
+			$myPhoto = new Photoupload($_FILES["fileToUpload"]);
+			echo "1";
+			$myPhoto->readExif();
+			echo "2";
+			if(!empty($myPhoto->photoDate)){
+				$textToImage = $myPhoto->photoDate;
+			} else {
+				$textToImage = "Pildistamise aeg teadmata";
+			}
+			echo "3";
 			//var_dump($_FILES["fileToUpload"]);
 			
-			$imageFileType = strtolower(pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION));			
-			$timestamp = microtime(1) * 10000;	
+			$myPhoto->makeFileName($imageNamePrefix);
+			echo "4";
+			//määrame faili nime
+			$target_file = $target_dir .$myPhoto->fileName;
 
-			$target_file_name = "vp_" .$timestamp ."." .$imageFileType;
-			$target_file = $target_dir ."vp_" .$timestamp ."." .$imageFileType;
+			echo "5";
+
+			$uploadOk = $myPhoto->checkForImage();
+
+			echo "6";
+
+			if($uploadOk == 1){
+			  // kas on sobiv tüüp
+			  $uploadOk = $myPhoto->checkForFileType();
+			}
+			echo "7";
+			if($uploadOk == 1){
+			  // kas on sobiv suurus
+			  $uploadOk = $myPhoto->checkForFileSize($_FILES["fileToUpload"], 2500000);
+			}
+			echo "8";
+			if($uploadOk == 1){
+			  // kas on juba olemas
+			  $uploadOk = $myPhoto->checkIfExists($target_file);
+			}
+			echo "9";
+			//$target_file_name = "vp_" .$timestamp ."." .$imageFileType;
+			//$target_file = $target_dir ."vp_" .$timestamp ."." .$imageFileType;
 			
 			//$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 			//$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 			
-			$check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+			/* $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
 			if($check !== false) {
 				//echo "Fail on " . $check["mime"] . " pilt.";
 				$uploadOk = 1;
@@ -67,26 +110,31 @@
 			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
 				$notice = "Lubatud on ainult JPG, JPEG, PNG ja GIF failid.";
 				$uploadOk = 0;
-			}
+			} */
 			// Check if $uploadOk is set to 0 by an error
-			if ($uploadOk == 0) {
-				$notice .= " Valitud faili ei saa üles laadida.";
+
+			echo "kas oleme siin";
+
+			if ($uploadOk == 0){
+				$notice = " Valitud faili ei saa üles laadida.";
 			// if everything is ok, try to upload file
 			} else {
-				$myPhoto = new Photoupload($_FILES["fileToUpload"]["tmp_name"], $imageFileType);
-				$myPhoto->changePhotoSize(600, 400);
-				$myPhoto->addWatermark();
-				$myPhoto->addTextToImage();
-				$notice = $myPhoto->savePhoto($target_file);
-				unset($myPhoto);
 				
-				if($notice == 1){
-					addPhotoData($target_file_name, $_POST["altText"], $_POST["privacy"]);
+				$myPhoto->changePhotoSize(600, 400);
+				$myPhoto->addWatermark($pathToWatermark);
+				$myPhoto->addTextToImage($textToImage);
+				$saveResult = $myPhoto->savePhoto($target_file);
+				
+				if($saveResult == 1){
+					$myPhoto->createThumbnail($thumbDir, $thumbSize);
+					$notice .= addPhotoData($myPhoto->fileName, $_POST["altText"], $_POST["privacy"]);
 					$uploadNotice = "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on üles laetud.";
 				} else {
 					$uploadNotice = "Faili üleslaadimisel tekkis tehniline viga.";
 				}
+			
 			}
+			unset($myPhoto);
 		}
 	}
 	
